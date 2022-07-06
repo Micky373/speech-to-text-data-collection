@@ -43,13 +43,15 @@ const Home = () => {
             <div className="text-center p-5">
                 <h1 className="mb-4">Text from the corpus here...</h1>
                 <div className="d-flex gap-3 justify-content-center">
-                    <Button
-                        onClick={start}
-                        variant="light"
-                        className="d-flex gap-2 align-items-center"
-                    >
-                        Record <Icon icon="el:record" />
-                    </Button>
+                    {recordState !== RecordState.START && (
+                        <Button
+                            onClick={start}
+                            variant="light"
+                            className="d-flex gap-2 align-items-center"
+                        >
+                            Record <Icon icon="el:record" />
+                        </Button>
+                    )}
                     {recordState === RecordState.START && (
                         <Button
                             onClick={stop}
