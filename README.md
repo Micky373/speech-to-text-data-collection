@@ -12,6 +12,7 @@ A speech to text data collection using Apache Kafka, Apache spark, Airflow, and 
     - [logs:](#logs)
     - [root folder](#root-folder)
   - [Installation guide](#installation-guide)
+  - [LICENCE](#license)
 
 ## Overview
  
