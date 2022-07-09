@@ -10,6 +10,14 @@ services:
     depends_on:
       - broker
       - rest-proxy
+  stt-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    ports:
+      - "5000:5000"
+    depends_on:
+      - broker
   spark:
     image: docker.io/bitnami/spark:3.3
     environment:
