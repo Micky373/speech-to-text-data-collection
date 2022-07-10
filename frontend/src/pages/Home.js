@@ -3,7 +3,7 @@ import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
 // import axios from 'axios';
 import React, { useState } from 'react';
 import ReactAudio from 'react-audio-player';
-import { Button, Spinner } from 'react-bootstrap';
+import { Button, Spinner, Alert } from 'react-bootstrap';
 
 const Home = () => {
   const [recordState, setRecordState] = useState(null);
@@ -41,7 +41,7 @@ const Home = () => {
 
   const getText = async () => {
     setTextLoading(true);
-    await fetch('http://localhost:6000/text', {
+    await fetch('http://localhost:12000/text', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ const Home = () => {
       body: JSON.stringify({
         name: 'my_consumer_instance',
         format: 'json',
-        'auto.offset.reset': 'earliest',
+        'auto.offset.reset': 'latest',
       }),
     });
     data = await data.json();
@@ -115,7 +115,7 @@ const Home = () => {
 
     // Send the audio file to kafka as a json object
     // axios.post('http://localhost:8082/upload', data)
-    fetch('http://localhost:8082/topics/kaf', {
+    let sentData = await fetch('http://localhost:8082/topics/kaf', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/vnd.kafka.json.v2+json',
@@ -126,10 +126,8 @@ const Home = () => {
         records: [{ value: { text, audio: blb } }],
       }),
     })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-      });
+    sentData = await sentData.json();
+    console.log(sentData);
     // let url = 'http://127.0.0.1:33507/predict';
 
     // axios.post(url, data).then((res) => {
@@ -138,6 +136,8 @@ const Home = () => {
     //   // setTranscription(data.data);
 
     setLoading(false);
+    alert('Thank you for your contribution!');
+    window.location.reload();
     // });
   };
 

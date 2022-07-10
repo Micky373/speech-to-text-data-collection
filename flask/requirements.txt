@@ -1,0 +1,6 @@
+boto3
+pandas
+flask
+flask_cors
+confluent_kafka
+kafka-python
