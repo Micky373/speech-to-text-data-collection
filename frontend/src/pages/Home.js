@@ -9,7 +9,8 @@ const Home = () => {
   const [recordState, setRecordState] = useState(null);
   const [audioBlob, setAudioBlob] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [text, setText] = useState('አበበ በሶ በላ');
+  const [textLoading, setTextLoading] = useState(false);
+  const [text, setText] = useState('');
 
   const start = () => {
     setAudioBlob(null);
@@ -38,6 +39,64 @@ const Home = () => {
     });
   };
 
+  const getText = async () => {
+    setTextLoading(true);
+
+    let data = await fetch('http://localhost:8082/consumers/raw', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.kafka.v2+json',
+      },
+      body: JSON.stringify({
+        name: 'my_consumer_instance',
+        format: 'json',
+        'auto.offset.reset': 'earliest',
+      }),
+    });
+    data = await data.json();
+    console.log('data1: ', data);
+    data = await fetch(
+      'http://localhost:8082/consumers/raw/instances/my_consumer_instance/subscription',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/vnd.kafka.v2+json',
+        },
+        body: JSON.stringify({ topics: ['raw'] }),
+      }
+    );
+    // data = await data.json();
+    console.log('data2: ', data.status);
+    console.log('Data2222222222222222');
+    data = await fetch(
+      'http://localhost:8082/consumers/raw/instances/my_consumer_instance/records',
+      {
+        headers: {
+          Accept: 'application/vnd.kafka.json.v2+json',
+        },
+      }
+    );
+    const json = await data.json();
+    console.log(json);
+    // check if there is data
+    if (json.length > 0) {
+      console.log(true);
+      const text = json[0].value;
+      console.log(text);
+      setText(json[0].value.text);
+    }
+    await fetch(
+      'http://localhost:8082/consumers/raw/instances/my_consumer_instance',
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/vnd.kafka.v2+json',
+        },
+      }
+    );
+    setTextLoading(false);
+  };
+
   const submit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -46,7 +105,7 @@ const Home = () => {
     data.append('file', audioBlob['url']);
     const blb = await convertBase64(audioBlob['blob']);
     // setMyad(blb);
-    alert('Hi');
+    // alert('Hi');
     console.log(blb);
 
     // Send the audio file to kafka as a json object
@@ -73,20 +132,31 @@ const Home = () => {
     //   console.log(data);
     //   // setTranscription(data.data);
 
-    //   setLoading(false);
+    setLoading(false);
     // });
   };
 
   return (
     <div className="min-vh-100 d-flex flex-column justify-content-center align-items-center">
+      <Button className="text-center p-2" onClick={getText}>
+        {' '}
+        {textLoading ? (
+          <Spinner animation="border" size="sm" />
+        ) : (
+          <span className="d-flex gap-2 align-items-center">GET TEXT</span>
+        )}
+      </Button>
       <div className="text-center p-5">
-        <h1 className="mb-4">Text from the corpus here...</h1>
+        <h1 className="mb-4">{text}</h1>
         <div className="d-flex gap-3 justify-content-center">
           {recordState !== RecordState.START && (
             <Button
               onClick={start}
               variant="light"
               className="d-flex gap-2 align-items-center"
+              // if there is text make it active otherwise make it disabled
+              disabled={text === ''}
+              // text !== '' ? disabled : active
             >
               Record <Icon icon="el:record" />
             </Button>
