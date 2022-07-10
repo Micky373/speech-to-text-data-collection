@@ -34,6 +34,25 @@ There are a number of large text corpora we will use, but for the purpose of tes
 Alternative data 
 Ready-made Amharic data collected from different sources  [here](https://arxiv.org/pdf/2103.05639.pdf)
 
+
+## Usage
+### Docker-compose
+Both the front-end and the back-end could be run on a docker container.
+<br>
+
+**1. Clone the repo**
+```
+git clone https://github.com/GrpHu/speech-to-text-data-collection
+```
+**2. cd into repo**
+```
+cd speech-to-text-data-collection
+```
+**3.Start docker container:**
+```
+docker-compose up -d
+```
+
 ## notebooks
 - [EDA.ipynb]: a jupyter notebook for exploratory data analysis
 ## scripts
@@ -43,6 +62,9 @@ Ready-made Amharic data collected from different sources  [here](https://arxiv.o
 
 ## logs:
 - the folder containing log files (if it doesn't exist it will be created once logging starts)
+
+## Contributors
+![Contributors list](https://github.com/GrpHu/speech-to-text-data-collection)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
