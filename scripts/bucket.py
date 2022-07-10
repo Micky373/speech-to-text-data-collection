@@ -13,9 +13,7 @@ CORS(app)
 
 @app.route("/health", methods=["GET"])
 def index():
-    return make_response(
-        jsonify({"timestamp": datetime.now().isoformat()}), 200
-    )
+    return make_response(jsonify({"timestamp": datetime.now().isoformat()}), 200)
 
 
 @app.route("/text", methods=["GET"])
@@ -36,9 +34,7 @@ def get_text():
     else:
         print(f"Unsuccessful S3 get_object response. Status - {status}")
 
-    producer = KafkaProducer(
-        value_serializer=lambda v: json.dumps(v).encode("utf-8")
-    )
+    producer = KafkaProducer(value_serializer=lambda v: json.dumps(v).encode("utf-8"))
     producer.send("raw", {"text": single_random_text[0].strip()})
 
     return make_response(
@@ -47,4 +43,4 @@ def get_text():
 
 
 if __name__ == "__main__":
-    app.run(host="localhost", port=5000, debug=False)
+    app.run(host="localhost", port=12000, debug=True)
