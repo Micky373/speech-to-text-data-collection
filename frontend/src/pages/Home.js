@@ -41,7 +41,12 @@ const Home = () => {
 
   const getText = async () => {
     setTextLoading(true);
-
+    await fetch('http://localhost:6000/text', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
     let data = await fetch('http://localhost:8082/consumers/raw', {
       method: 'POST',
       headers: {
