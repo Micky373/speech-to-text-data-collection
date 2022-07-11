@@ -63,9 +63,6 @@ docker-compose up -d
 ## logs:
 - the folder containing log files (if it doesn't exist it will be created once logging starts)
 
-## Contributors
-![Contributors list](https://github.com/GrpHu/speech-to-text-data-collection)
-
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
 
